@@ -1,18 +1,22 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { createStore, combineReducer } from "redux";
-import { Provider } from "react-redux";
-import { PRODUCTS } from "../data/dummy-data";
+import { View, Text, StyleSheet, FlatList} from "react-native";
+import { useSelector } from "react-redux";
+
 
 const ProductOverviewScreen = props => {
-    <View>
+  const products = useSelector(state => state.products.availableProducts);
+  return(
+    <FlatList
+      data={products}
+      renderItem={itemData => <Text>{itemData.item.title}</Text>}
+      keyExtractor={(item) => item.id}
+    />
+  );
+};
 
-    </View>
+
+ProductOverviewScreen.navigationOptions = {
+    headerTitle:'All Products'
 }
-
-
-const styles=StyleSheet.create({
-
-})
 
 export default ProductOverviewScreen;
