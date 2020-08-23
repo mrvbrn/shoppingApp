@@ -31,6 +31,7 @@ const styles=StyleSheet.create({
         height:300,
     },
     price:{
+        fontFamily:'rubik_medium',
         fontSize:20,
         color:'#888',
         marginVertical:10,

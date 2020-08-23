@@ -61,10 +61,13 @@ const styles = StyleSheet.create({
         overflow:'hidden'
     },
     title:{
+        fontFamily:'rubik_medium',
         fontSize:18,
         marginVertical:4
+
     },
     price:{
+        fontFamily:'rubik_regular',
         fontSize:14,
         color:'#888'
     },
