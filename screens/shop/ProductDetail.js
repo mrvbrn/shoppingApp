@@ -17,7 +17,7 @@ const ProductDetail = props => {
           color={Colors.primary} 
           title="Add to Cart" 
           onPress={() => {
-            useDispatch(cartActions.addToCart(selectedProduct))
+            dispatch(cartActions.addToCart(selectedProduct))
           }}/>
       </View>
       <Text style={styles.price}>${selectedProduct.price.toFixed(2)}</Text>
