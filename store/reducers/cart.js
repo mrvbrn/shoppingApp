@@ -53,7 +53,8 @@ export default (state = initialState, action) => {
         totalAmount:state.totalAmount - selectedItem.productPrice
       };
     case ADD_ORDER:
-        return initialState    
+        return initialState
+     
   }
   return state;
 };
