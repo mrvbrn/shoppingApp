@@ -74,13 +74,13 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignItems:'center',
         justifyContent:'space-around',
-        height:'25%',
+        height:'23%',
         paddingHorizontal:20
     },
     details:{
         alignItems:'center',
         padding:10,
-        height:'15%'
+        height:'17%'
     }
 })
 
