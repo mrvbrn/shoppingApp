@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import * as productsActions from '../../store/actions/products';
+import Input from "../../components/UI/Input";
 
 const FORM_INPUT_REDUCER = 'FORM_INPUT_REDUCER';
 
@@ -114,22 +115,21 @@ const EditProductScreen = props => {
   return (
     <ScrollView>
       <View style={styles.form}>
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.title}
-            onChangeText={textChangeHandler.bind(this, 'title')}
-          />
-        </View>
-        {!formState.inputValidities.title && <Text> Please enter valid title!</Text>}
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Image URL</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.imageUrl}
-            onChangeText={textChangeHandler.bind(this, 'imageUrl')}
-          />
+        <Input
+          label='Title'
+          errorText='Please enter a valid Title!'
+          keyboardType='default'
+          autoCapitalize="sentences"
+          autoCorrect
+          returnKeyText="next"
+          title=
+        />
+        <Input
+          label="imageUrl"
+          errorText="Please enter a valid image url"
+          returnKeyText="next"
+        />
+          
         </View>
         {editedProduct ? null : (
           <View style={styles.formControl}>
@@ -179,19 +179,6 @@ const styles = StyleSheet.create({
   form: {
     margin: 20
   },
-  formControl: {
-    width: '100%'
-  },
-  label: {
-    fontFamily: 'rubik_medium',
-    marginVertical: 8
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1
-  }
 });
 
 export default EditProductScreen;
