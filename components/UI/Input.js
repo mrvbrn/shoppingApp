@@ -1,14 +1,24 @@
-import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, {useReducer, useEffect } from "react";
+import { View, Text, TextInput, StyleSheet } from "react-native";
 
 const INPUT_CHANGE = 'INPUT_CHANGE';
+const INPUT_BLUR = 'INPUT_BLUR';
 
 const inputReducer = (state, action) => {
   switch(action.type){
     case INPUT_CHANGE:
+      return{
+        ...state,
+        value:action.value,
+        isValid:action.isValid
+      }
+    case INPUT_BLUR:
+      return{
+        ...state,
+        touched:true
+      }
       default:
         return state;
-
   }
 }
 
@@ -40,6 +50,18 @@ const textChangeHandler = text => {
   }
   dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
 };
+
+const { onInputChange, id } = props;
+
+useEffect(() => {
+  if(inputState.touched){
+    onInputChange(id, inputState.value, inputState.isValid);
+  }
+}, [onInputChange, inputState, id]);
+
+const lostFocusHandler = () => {
+    dispatch({type:INPUT_BLUR})
+}
   return (
     <View>
       <View style={styles.formControl}>
@@ -47,11 +69,16 @@ const textChangeHandler = text => {
           <TextInput
             {...props}
             style={styles.input}
-            value={props.title}
-            onChangeText={textChangeHandler.bind(this, 'title')}
+            value={inputState.value}
+            onChangeText={textChangeHandler}
+            onBlur={lostFocusHandler}
           />
       </View>
-    {!props.title && <Text>{props.errorText}</Text>}
+    {!inputState.isValid && inputState.touched &&
+     <View style={styles.errorContainer}>
+       <Text style={styles.errorText}>{props.errorText}</Text>
+     </View>
+    }
     </View>
   )
 };
@@ -69,6 +96,15 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     borderBottomColor: '#ccc',
     borderBottomWidth: 1
+  },
+  errorText:{
+    fontFamily:'rubik_regular',
+    color:'red',
+    fontSize:13
+
+  },
+  errorContainer:{
+    marginVertical:5
   }
 });
 

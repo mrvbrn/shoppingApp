@@ -2,11 +2,10 @@ import React, { useState, useEffect, useCallback, useReducer } from 'react';
 import {
   View,
   ScrollView,
-  Text,
-  TextInput,
   StyleSheet,
   Platform,
-  Alert
+  Alert,
+  KeyboardAvoidingView
 } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -65,18 +64,14 @@ const EditProductScreen = props => {
             )
 
 
-  const textChangeHandler = (inputIdentifier, text) => {
-    let isValid = false;
-    if(text.trim().length > 0){
-        isValid = true ; 
-    }
+  const inputChangeHandler = useCallback((inputIdentifier, inputValue, inputValidity) => {
     dispatchFormState({ 
         type:FORM_INPUT_REDUCER, 
-        value:text, 
-        isValid:isValid,
+        value:inputValue, 
+        isValid:inputValidity,
         input:inputIdentifier
     });
-  }
+  },[dispatchFormState]);
 
 
   const submitHandler = useCallback(() => {
@@ -113,45 +108,63 @@ const EditProductScreen = props => {
   }, [submitHandler]);
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <Input
-          label='Title'
-          errorText='Please enter a valid Title!'
-          keyboardType='default'
-          autoCapitalize="sentences"
-          autoCorrect
-          returnKeyText="next"
-          title=
-        />
-        <Input
-          label="imageUrl"
-          errorText="Please enter a valid image url"
-          returnKeyText="next"
-        />
-          
-        </View>
-        {editedProduct ? null : (
-          <View style={styles.formControl}>
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-              style={styles.input}
-              value={formState.inputValues.price}
-              onChangeText={textChangeHandler.bind(this, 'price')}
+    <KeyboardAvoidingView  style={{flex:1}} behaviour="padding" keyboardVerticalOffset={100}>
+        <ScrollView>
+          <View style={styles.form}>
+            <Input
+              id="title"
+              label='Title'
+              errorText='Please enter a valid Title!'
+              keyboardType='default'
+              autoCapitalize="sentences"
+              autoCorrect
+              returnKeyText="next"
+              onInputChange={inputChangeHandler}
+              initialValue={editedProduct ? editedProduct.title : ""}
+              initiallyValid={!!editedProduct}
+              required
+            />
+            <Input
+              id="imageUrl"
+              label="imageUrl"
+              errorText="Please enter a valid image url"
+              returnKeyText="next"
+              initialValue={editedProduct ? editedProduct.imageUrl : ""}
+              onInputChange={inputChangeHandler}
+              initiallyValid={!!editedProduct}
+              required
+            />
+              
+            {editedProduct ? null : (
+            <Input
+              id="price"
+              label="Price"
+              errorText="Please enter a valid price"
               keyboardType="decimal-pad"
+              returnKeyText="next"
+              onInputChange={inputChangeHandler}
+              required
+              min={0.1}
+             />
+            )}
+            <Input
+              id="description"
+              label="Description"
+              errorText="Please enter a valid description"
+              keyboardType="default"
+              autoCapitalize="sentences"
+              autoCorrect
+              multiline
+              numberOfLines={3}
+              initialValue={editedProduct ? editedProduct.description : ""}
+              onInputChange={inputChangeHandler}
+              initiallyValid={!!editedProduct}
+              required
+              minLength={5} 
             />
           </View>
-        )}
-        <View style={styles.formControl}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.description}
-            onChangeText={textChangeHandler.bind(this, 'description')}
-          />
-        </View>
-      </View>
-    </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
   );
 };
 
