@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { View, Text, FlatList, Platform, Button } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
@@ -6,12 +6,17 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import ProductItem from "../../components/shop/ProductItem";
 import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
 import * as cartActions from "../../store/actions/cart";
+import * as productsActions from "../../store/actions/products";
 import Colors from "../../constants/Colors";
 
 
 const ProductOverviewScreen = props => {
   const products = useSelector(state => state.products.availableProducts);
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(productsActions.fetchProducts());
+  }, [dispatch]);
 
   const onSelect = (id, title) => {
                           props.navigation.navigate('ProductDetail', {
