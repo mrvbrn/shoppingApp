@@ -27,9 +27,17 @@ const ProductOverviewScreen = props => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
+
   useEffect(() => {
-    loadProducts();
-  }, [dispatch, loadProducts]);
+    const willFocusSub = props.navigation.addListener('willFocus', loadProducts);
+    return () => {
+      willFocusSub.remove()
+    };
+  }, [loadProducts])
+
+  // useEffect(() => {
+  //   loadProducts();
+  // }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
@@ -74,13 +82,13 @@ const ProductOverviewScreen = props => {
                                  title={itemData.item.title}
                                  image={itemData.item.imageUrl}
                                  price={itemData.item.price}
-                                 onSelect={() => onSelect(itemData.item.id, itemData.item.title)}
+                                 onSelect={() => selectItemHandler(itemData.item.id, itemData.item.title)}
                                 >
                                 <Button 
                                   color={Colors.primary} 
                                   title="View Details" 
                                   onPress={() => {
-                                    onSelect(itemData.item.id, itemData.item.title)
+                                    selectItemHandler(itemData.item.id, itemData.item.title)
                                   }}
                                 />
                                 <Button 
