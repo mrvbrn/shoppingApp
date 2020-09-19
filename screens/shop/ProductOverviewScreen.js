@@ -27,17 +27,20 @@ const ProductOverviewScreen = props => {
     setIsLoading(false);
   }, [dispatch, setIsLoading, setError]);
 
+  useEffect(() => {
+    const focusSub = props.navigation.addListener(
+      'focus',
+      loadProducts
+    );
+
+    return () => {
+      focusSub.remove();
+    };
+  }, [loadProducts]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', loadProducts);
-    return () => {
-      willFocusSub.remove()
-    };
-  }, [loadProducts])
-
-  // useEffect(() => {
-  //   loadProducts();
-  // }, [dispatch, loadProducts]);
+    loadProducts();
+  }, [dispatch, loadProducts]);
 
   const selectItemHandler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
@@ -78,29 +81,26 @@ const ProductOverviewScreen = props => {
   return(
     <FlatList
       data={products}
-      renderItem={itemData => <ProductItem 
-                                 title={itemData.item.title}
-                                 image={itemData.item.imageUrl}
-                                 price={itemData.item.price}
-                                 onSelect={() => selectItemHandler(itemData.item.id, itemData.item.title)}
-                                >
-                                <Button 
-                                  color={Colors.primary} 
-                                  title="View Details" 
-                                  onPress={() => {
-                                    selectItemHandler(itemData.item.id, itemData.item.title)
-                                  }}
-                                />
-                                <Button 
-                                  color={Colors.primary} 
-                                  title="To Cart" 
-                                  onPress={() => {                                             
-                                    dispatch(cartActions.addToCart(itemData.item))
-                                  }}
-                                />
-                              </ProductItem>
-                              }
-      keyExtractor={(item) => item.id}
+      keyExtractor={item => item.id}
+      renderItem={itemData => 
+        <ProductItem 
+          title={itemData.item.title}
+          image={itemData.item.imageUrl}
+          price={itemData.item.price}
+          onSelect={() => {selectItemHandler(itemData.item.id, itemData.item.title)}}
+        >
+          <Button 
+            color={Colors.primary} 
+            title="View Details" 
+            onPress={() => {selectItemHandler(itemData.item.id, itemData.item.title)}}
+          />
+          <Button 
+            color={Colors.primary} 
+            title="To Cart" 
+            onPress={() => {dispatch(cartActions.addToCart(itemData.item))}}
+          />
+        </ProductItem>
+      }
     />
   );
 };
