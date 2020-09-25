@@ -51,11 +51,13 @@ const AuthScreen = props => {
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
       email : "",
-      password: ""  
+      password: ""
+     
     },
     inputValidities: {
       email : false,
-      password : false 
+      password : false
+     
     },
     formIsValid: false
   });
@@ -63,25 +65,27 @@ const AuthScreen = props => {
   const authHandler = async () => {
     let action;
     if (isSignUp){
-      action = authActions.signUp(formState.inputValues.email, formState.inputValues.password);
-    } else {
-      action = authActions.logIn(formState.inputValues.email, formState.inputValues.password);
+      action =  dispatch(authActions.signUp(formState.inputValues.email, formState.inputValues.password));
+    }else{
+      action =  dispatch(authActions.logIn(formState.inputValues.email, formState.inputValues.password));
     }
     setError(null)
     setIsLoading(true)
-    try{
+    try {
        await dispatch(action)
-       props.navigation.navigate('Shop')
      }catch(err){
       setError(err.message);
-      setIsLoading(false);  
-     }     
+     }
+   
+    setIsLoading(false)
+   
   };
 
   useEffect(() => {
     if(error){
       Alert.alert('An error occured!', error, [{text : 'Okay'}])
     }
+
   }, [error])
 
 
