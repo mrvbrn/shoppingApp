@@ -11,7 +11,7 @@ import CartScreen, {screenOptions as cartScreenOption} from "../screens/shop/Car
 import OrdersScreen, {screenOptions as orderScreenOption} from "../screens/shop/OrdersScreen";
 import UserProduct, {screenOptions as userProductScreenOption} from "../screens/user/UserProduct";
 import EditProduct, {screenOptions as editProductScreenOption} from "../screens/user/EditProduct";
-import AuthScreen from "../screens/user/AuthScreen";
+import AuthScreen, {screenOptions as authScreenOption} from "../screens/user/AuthScreen";
 import StartupScreen from "../screens/StartupScreen";
 import  Colors  from "../constants/Colors";
 import * as authActions from "../store/actions/auth";
@@ -151,7 +151,7 @@ const AdminNavigator = () => {
 
 const ShopDrawerNavigator = createDrawerNavigator();
 
-const ShopNavigator = () => {
+export const ShopNavigator = () => {
   const dispatch = useDispatch();
 
   return (
@@ -252,21 +252,35 @@ const ShopNavigator = () => {
 //   }
 // );
 
-const AuthNavigator = createStackNavigator(
-  {
-    Auth:AuthScreen
-  },
-  {
-  defaultNavigationOptions:defaultNavOptions
-  }
-);
+const AuthStackNavigator = createStackNavigator();
 
-const MainNavigator = createSwitchNavigator(
-  {
-    Startup:StartupScreen,
-    Auth:AuthNavigator,
-    Shop:ShopNavigator
-  }
-);
+export const AuthNavigator = () => {
+  return(
+    <AuthStackNavigator.Navigator screenOptions={defaultNavOptions}>
+      <AuthStackNavigator.Screen
+        name="Auth"
+        component={AuthScreen}
+        options={authScreenOption}
+      />
+    </AuthStackNavigator.Navigator>
+  )
+}
 
-export default createAppContainer(MainNavigator);
+// const AuthNavigator = createStackNavigator(
+//   {
+//     Auth:AuthScreen
+//   },
+//   {
+//   defaultNavigationOptions:defaultNavOptions
+//   }
+// );
+
+// const MainNavigator = createSwitchNavigator(
+//   {
+//     Startup:StartupScreen,
+//     Auth:AuthNavigator,
+//     Shop:ShopNavigator
+//   }
+// );
+
+// export default createAppContainer(MainNavigator);
