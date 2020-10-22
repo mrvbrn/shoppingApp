@@ -29,13 +29,13 @@ const ProductOverviewScreen = props => {
   }, [dispatch, setIsLoading, setError]);
 
   useEffect(() => {
-    const focusSub = props.navigation.addListener(
+    const unsubscribe = props.navigation.addListener(
       'focus',
       loadProducts
     );
 
     return () => {
-      focusSub.remove();
+      unsubscribe;
     };
   }, [loadProducts]);
 
