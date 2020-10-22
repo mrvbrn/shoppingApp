@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useCallback } from "react";
 import {
   View,
   ScrollView,
@@ -11,10 +11,10 @@ import {
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { useSelector, useDispatch } from 'react-redux';
 
-import CustomHeaderButton from "../../components/UI/CustomHeaderButton";
+import CustomHeaderButton from '../../components/UI/CustomHeaderButton';
 import * as productsActions from '../../store/actions/products';
-import Input from "../../components/UI/Input";
-import Colors from "../../constants/Colors";
+import Input from '../../components/UI/Input';
+import Colors from '../../constants/Colors';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -41,10 +41,11 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const EditProduct = props => {
+const EditProductScreen = props => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-  const prodId = props.navigation.getParam('productId');
+
+  const prodId = props.route.params ? props.route.params.productId : "";
   const editedProduct = useSelector(state =>
     state.products.userProducts.find(prod => prod.id === prodId)
   );
@@ -66,22 +67,21 @@ const EditProduct = props => {
     formIsValid: editedProduct ? true : false
   });
 
-
   useEffect(() => {
-    if(error){
-        Alert.alert('An error occured!', error, [{text:'Okay'}])
-    } 
+    if (error) {
+      Alert.alert('An error occurred!', error, [{ text: 'Okay' }]);
+    }
   }, [error]);
 
-  const submitHandler = useCallback(async() => {
+  const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors in the form.', [
         { text: 'Okay' }
       ]);
       return;
     }
-    setIsLoading(true)
-    setError(null)
+    setError(null);
+    setIsLoading(true);
     try {
       if (editedProduct) {
         await dispatch(
@@ -104,10 +104,11 @@ const EditProduct = props => {
       }
       props.navigation.goBack();
     } catch (err) {
-      setError(err.message)
-    };
-  
-    setIsLoading(false)
+      setError(err.message);
+    }
+
+    setIsLoading(false);
+    
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
@@ -200,12 +201,13 @@ const EditProduct = props => {
 };
 
 export const screenOptions = navData => {
-  const submitFn = navData.navigation.getParam('submit');
+  const submitFn = navData.route.params ? navData.route.params.submit : "";
+  const routeParams = navData.route.params ? navData.route.params : {};
   return {
-    headerTitle: navData.navigation.getParam('productId')
+    headerTitle: routeParams.productId
       ? 'Edit Product'
       : 'Add Product',
-    headerRight:() => (
+    headerRight: () =>  (
       <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
         <Item
           title="Save"
@@ -223,11 +225,12 @@ const styles = StyleSheet.create({
   form: {
     margin: 20
   },
-    centered:{
-    flex:1, 
-    justifyContent:'center', 
-    alignItems:'center'
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });
 
-export default EditProduct;
+export default EditProductScreen;
+
