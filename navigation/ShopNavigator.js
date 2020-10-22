@@ -124,7 +124,7 @@ const AdminNavigator = () => {
       <AdminStackNavigator.Screen
         name="EditProduct"
         component={EditProduct}
-        options={userProductScreenOption}
+        options={editProductScreenOption}
       />
     </AdminStackNavigator.Navigator>
   )
@@ -165,7 +165,7 @@ export const ShopNavigator = () => {
                 title="Logout"
                 color={Colors.primary}
                 onPress={() => {
-                  dispatch(authActions.logout());
+                  dispatch(authActions.logOut());
                   // props.navigation.navigate('Auth');
                 }}
               />
