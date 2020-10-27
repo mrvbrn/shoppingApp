@@ -65,8 +65,8 @@ export const addOrder = (cartItems, totalAmount) => {
     orderData: { id: resData.name, items: cartItems, amount: totalAmount, date:date }
   });
 
-  for (const cartItem in cartItems){
-    const pushToken = cartItem.pushToken;
+  for (const cartItem of cartItems){
+    const pushToken = cartItem.productPushToken;
 
     fetch("https://exp.host/--/api/v2/push/send", {
       method:'POST',
